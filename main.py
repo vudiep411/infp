@@ -1,6 +1,7 @@
 from BigNumber import BigNumber
 
-big_num1 = BigNumber("222")
-big_num2 = BigNumber("222")
-a = big_num1 + big_num2
-print(a.toString())
+a = BigNumber("-100.74945")
+b = BigNumber("1.00000")
+c = a + b
+
+print(c.toString())

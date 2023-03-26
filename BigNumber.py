@@ -1,28 +1,37 @@
 class BigNumber:
-    def __init__(self, value, negative=None):
+    def __init__(self, value, negative=None, decimal=None):
         self.negative = negative if negative is not None else value[0] == '-'
         self.value = value[1:] if value[0] == '-' else value
+        if decimal is None:
+            self.decimal = len(value) - value.find('.') - 1 if value.find('.') != -1 else 0
+        else:
+            self.decimal = decimal
+        self.value = self.value.replace('.', '')
+
 
     def __add__(self, other):
         return self.add(other)
     
+
     def add(self, other):
+        decimal = self.getBiggerDecimal(other)
+        self.padDecimal(other)
         if self.negative and not other.negative:
             if self.isBigger(other):
-                return BigNumber(self.absoluteSubtract(other)).negate()
+                return BigNumber(value=self.absoluteSubtract(other), decimal=decimal).negate()
             else:
-                return BigNumber(other.absoluteSubtract(self))
+                return BigNumber(value=other.absoluteSubtract(self), decimal=decimal)
         elif not self.negative and other.negative:
             if self.isBigger(other):
-                return BigNumber(self.absoluteSubtract(other))
+                return BigNumber(value=self.absoluteSubtract(other), decimal=decimal)
             else:
-                return BigNumber(other.absoluteSubtract(self)).negate()
+                return BigNumber(value=other.absoluteSubtract(self), decimal=decimal).negate()
         else:
-            return BigNumber(self.abosoluteAdd(other), self.negative)
+            return BigNumber(value=self.abosoluteAdd(other), negative=self.negative, decimal=decimal)
 
-  
-      
+
     def abosoluteAdd(self, other):
+        # self.padDecimal(other)
         result = ""
         carry = 0
         self_idx = len(self.value) - 1
@@ -61,7 +70,7 @@ class BigNumber:
 
   
     def negate(self):
-        return BigNumber(self.value, not self.negative)
+        return BigNumber(self.value, not self.negative, decimal=self.decimal)
 
   
     def isBigger(self, other):
@@ -79,8 +88,29 @@ class BigNumber:
                 i += 1
         return False
 
+    def getBiggerDecimal(self, other):
+        return max(self.decimal, other.decimal)
+
+    def padDecimal(self, other):
+        pads = abs(self.decimal - other.decimal)
+        if pads > 0:
+            i = 0
+            if self.decimal > other.decimal:
+                while i < pads:
+                    other.value += '0'
+                    i += 1
+            else: 
+                while i < pads:
+                    self.value += '0'
+                    i += 1
+
     def toString(self):
         if len(self.value) == 1 and self.value[0] == '0':
             return '0'
         else:
-            return '-' + self.value if self.negative else self.value
+            if self.decimal == 0:
+                return '-' + self.value if self.negative else self.value
+            else:
+                decimal_idx = len(self.value) - self.decimal
+                negative = '-' if self.negative else ''
+                return negative + self.value[:decimal_idx] + '.' + self.value[decimal_idx:]
