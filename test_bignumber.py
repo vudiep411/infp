@@ -64,3 +64,25 @@ def test_add_negative_positive():
     n1 = BigNumber("-1654989746897")
     n2 = BigNumber("222876787685")
     assert n1.add(n2).toString() == "-1432112959212"
+
+
+def test_add_decimal():
+    n1 = BigNumber("-222")
+    n2 = BigNumber("222.00")
+    assert n1.add(n2).toString() == "0"
+
+    n1 = BigNumber("1.00")
+    n2 = BigNumber("99")
+    assert n1.add(n2).toString() == "100.00"
+
+    n1 = BigNumber("-2")
+    n2 = BigNumber("-2.00")
+    assert n1.add(n2).toString() == "-4.00"
+
+    n1 = BigNumber("-222.123")
+    n2 = BigNumber("111.123")
+    assert n1.add(n2).toString() == "-111.000"
+
+    n1 = BigNumber("-1654989746897.123465")
+    n2 = BigNumber("222876787685.123465")
+    assert n1.add(n2).toString() == "-1432112959212.000000"
