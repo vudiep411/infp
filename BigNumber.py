@@ -12,6 +12,9 @@ class BigNumber:
     def __add__(self, other):
         return self.add(other)
     
+    def __str__(self) -> str:
+        return self.toString()
+
 
     def add(self, other):
         decimal = self.getBiggerDecimal(other)

@@ -1,7 +1,7 @@
 from BigNumber import BigNumber
 
-a = BigNumber("-100.74945")
-b = BigNumber("1.00000")
+a = BigNumber("-.111")
+b = BigNumber("1")
 c = a + b
 
-print(c.toString())
+print(c)
