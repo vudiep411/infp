@@ -86,3 +86,42 @@ def test_add_decimal():
     n1 = BigNumber("-1654989746897.123465")
     n2 = BigNumber("222876787685.123465")
     assert n1.add(n2).toString() == "-1432112959212.000000"
+
+
+def test_sub_same_sign():
+    n1 = BigNumber("5")
+    n2 = BigNumber("5.0")
+    assert n1.subtract(n2).toString() == "0"
+
+    n1 = BigNumber("-5")
+    n2 = BigNumber("-5.0")
+    assert n1.subtract(n2).toString() == "0"
+
+    n1 = BigNumber("-5")
+    n2 = BigNumber("-10.0")
+    assert n1.subtract(n2).toString() == "5.0"
+
+    n1 = BigNumber("-10.0")
+    n2 = BigNumber("-5.0")
+    assert n1.subtract(n2).toString() == "-5.0"
+
+    n1 = BigNumber("10")
+    n2 = BigNumber("5")
+    assert n1.subtract(n2).toString() == "5"
+
+def test_sub_different_sign():
+    n1 = BigNumber("5")
+    n2 = BigNumber("-5.0")
+    assert n1.subtract(n2).toString() == "10.0"
+
+    n1 = BigNumber("-5")
+    n2 = BigNumber("5.0")
+    assert n1.subtract(n2).toString() == "-10.0"
+
+    n1 = BigNumber("10")
+    n2 = BigNumber("-5.0")
+    assert n1.subtract(n2).toString() == "15.0"
+
+    n1 = BigNumber("-10")
+    n2 = BigNumber("5.0")
+    assert n1.subtract(n2).toString() == "-15.0"
