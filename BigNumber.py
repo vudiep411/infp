@@ -91,8 +91,10 @@ class BigNumber:
                 i += 1
         return False
 
+
     def getBiggerDecimal(self, other):
         return max(self.decimal, other.decimal)
+
 
     def padDecimal(self, other):
         pads = abs(self.decimal - other.decimal)
@@ -106,6 +108,7 @@ class BigNumber:
                 while i < pads:
                     self.value += '0'
                     i += 1
+
 
     def toString(self):
         if len(self.value) == 1 and self.value[0] == '0':
