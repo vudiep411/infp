@@ -109,6 +109,7 @@ def test_sub_same_sign():
     n2 = BigNumber("5")
     assert n1.subtract(n2).toString() == "5"
 
+
 def test_sub_different_sign():
     n1 = BigNumber("5")
     n2 = BigNumber("-5.0")
@@ -125,3 +126,25 @@ def test_sub_different_sign():
     n1 = BigNumber("-10")
     n2 = BigNumber("5.0")
     assert n1.subtract(n2).toString() == "-15.0"
+
+
+def test_multiply():
+    n1 = BigNumber("5")
+    n2 = BigNumber("-5.0")
+    assert n1.multiply(n2).toString() == "-25.0"
+
+    n1 = BigNumber("-5")
+    n2 = BigNumber("-5.0")
+    assert n1.multiply(n2).toString() == "25.0"     
+
+    n1 = BigNumber("1.2")
+    n2 = BigNumber("1.2")
+    assert n1.multiply(n2).toString() == "1.44" 
+
+    n1 = BigNumber("5")
+    n2 = BigNumber("0.0")
+    assert n1.multiply(n2).toString() == "0.0" 
+
+    n1 = BigNumber("55555")
+    n2 = BigNumber("546465")
+    assert n1.multiply(n2).toString() == "30358863075" 
