@@ -11,7 +11,10 @@ class BigNumber:
 
     def __add__(self, other):
         return self.add(other)
-    
+
+    def __sub__(self, other):
+        return self.subtract(other)
+
     def __str__(self) -> str:
         return self.toString()
 
@@ -32,6 +35,24 @@ class BigNumber:
         else:
             return BigNumber(value=self.abosoluteAdd(other), negative=self.negative, decimal=decimal)
 
+
+    def subtract(self, other):
+        decimal = self.getBiggerDecimal(other)
+        self.padDecimal(other)
+        if self.negative and not other.negative:
+            return BigNumber(value=self.abosoluteAdd(other), negative=True, decimal=decimal)
+        elif not self.negative and other.negative:
+            return BigNumber(value=self.abosoluteAdd(other), negative=False, decimal=decimal)
+        elif self.negative and other.negative:
+            if self.isBigger(other):
+                return BigNumber(value=self.absoluteSubtract(other), negative=True, decimal=decimal)
+            else: 
+                return BigNumber(value=other.absoluteSubtract(self), negative=False, decimal=decimal)
+        else:
+            if self.isBigger(other):
+                return BigNumber(value=self.absoluteSubtract(other), negative=False, decimal=decimal)
+            else:           
+                return BigNumber(value=other.absoluteSubtract(self), negative=True, decimal=decimal)
 
     def abosoluteAdd(self, other):
         # self.padDecimal(other)
