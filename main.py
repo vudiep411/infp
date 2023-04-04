@@ -4,6 +4,7 @@ from BigNumber import BigNumber
 # b = BigNumber("222.22")
 # c = a*(b)
 
-c = BigNumber("5555") * BigNumber("555")
-print(c)
+c = BigNumber("555") / BigNumber("55")
+print(f"Result: {c}")
+
 

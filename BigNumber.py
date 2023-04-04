@@ -1,4 +1,5 @@
 class BigNumber:
+    # Constructor
     def __init__(self, value, negative=None, decimal=None):
         self.negative = negative if negative is not None else value[0] == '-'
         self.value = value[1:] if value[0] == '-' else value
@@ -9,6 +10,7 @@ class BigNumber:
         self.value = self.value.replace('.', '')
 
 
+    # Overloaded Ops
     def __add__(self, other):
         return self.add(other)
 
@@ -18,10 +20,14 @@ class BigNumber:
     def __mul__(self, other):
         return self.multiply(other)
 
+    def __truediv__(self, other):
+        return self.divide(other)
+
     def __str__(self) -> str:
         return self.toString()
 
 
+    # Helper Operations
     def add(self, other):
         decimal = self.getBiggerDecimal(other)
         self.padDecimal(other)
@@ -63,6 +69,18 @@ class BigNumber:
         else:
             return BigNumber(other.absoluteMultiply(self), negative=True, decimal=decimal)
 
+    def divide(self, other):
+        self.padDecimal(other)
+        if other.isBigger(self):
+            return BigNumber(value=self.value, negative=self.negative, decimal=self.decimal)
+        elif (self.negative and other.negative) or (not self.negative and  not other.negative):
+            return BigNumber(self.absoluteDivide(other), negative=False)
+        else:
+            return BigNumber(self.absoluteDivide(other), negative=True)
+
+
+
+    # Algorithms
     def abosoluteAdd(self, other):
         result = ""
         carry = 0
@@ -120,10 +138,14 @@ class BigNumber:
             result = (BigNumber(result, negative=False) + BigNumber(temp, negative=False)).value
             other_idx -= 1
         return result
-  
+    
+    def absoluteDivide(self, other):
+        result = "0"
+        return result
+
+    # Helper Functions
     def negate(self):
         return BigNumber(self.value, not self.negative, decimal=self.decimal)
-
   
     def isBigger(self, other):
         if len(self.value) > len(other.value):
@@ -140,10 +162,8 @@ class BigNumber:
                 i += 1
         return False
 
-
     def getBiggerDecimal(self, other):
         return max(self.decimal, other.decimal)
-
 
     def padDecimal(self, other):
         pads = abs(self.decimal - other.decimal)
