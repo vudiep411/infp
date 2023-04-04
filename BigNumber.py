@@ -15,6 +15,9 @@ class BigNumber:
     def __sub__(self, other):
         return self.subtract(other)
 
+    def __mul__(self, other):
+        return self.multiply(other)
+
     def __str__(self) -> str:
         return self.toString()
 
@@ -35,7 +38,6 @@ class BigNumber:
         else:
             return BigNumber(value=self.abosoluteAdd(other), negative=self.negative, decimal=decimal)
 
-
     def subtract(self, other):
         decimal = self.getBiggerDecimal(other)
         self.padDecimal(other)
@@ -54,8 +56,14 @@ class BigNumber:
             else:           
                 return BigNumber(value=other.absoluteSubtract(self), negative=True, decimal=decimal)
 
+    def multiply(self, other):
+        decimal = self.decimal + other.decimal
+        if (self.negative and other.negative) or (not self.negative and  not other.negative):
+            return BigNumber(other.absoluteMultiply(self), negative=False, decimal=decimal)
+        else:
+            return BigNumber(other.absoluteMultiply(self), negative=True, decimal=decimal)
+
     def abosoluteAdd(self, other):
-        # self.padDecimal(other)
         result = ""
         carry = 0
         self_idx = len(self.value) - 1
@@ -71,7 +79,6 @@ class BigNumber:
             result = str(carry) + result
         return result
 
-  
     def absoluteSubtract(self, other):
         result = ""
         borrow = 0
@@ -92,6 +99,27 @@ class BigNumber:
 
         return result if result else '0'
 
+    def absoluteMultiply(self, other):
+        result = "0"
+        carry = 0
+        base = ""
+        other_idx = len(other.value) - 1
+        while other_idx >= 0:
+            self_idx = len(self.value) - 1
+            temp = ""
+            while self_idx >= 0:
+                product = int(self.value[self_idx]) * int(other.value[other_idx]) + carry
+                temp = str(product % 10) + temp
+                carry = product // 10
+                self_idx -= 1
+            if carry > 0:
+                temp = str(carry) + temp
+                carry = 0
+            temp += base
+            base += '0'
+            result = (BigNumber(result, negative=False) + BigNumber(temp, negative=False)).value
+            other_idx -= 1
+        return result
   
     def negate(self):
         return BigNumber(self.value, not self.negative, decimal=self.decimal)
@@ -129,7 +157,6 @@ class BigNumber:
                 while i < pads:
                     self.value += '0'
                     i += 1
-
 
     def toString(self):
         if len(self.value) == 1 and self.value[0] == '0':
