@@ -3,11 +3,20 @@ class BigNumber:
     def __init__(self, value, negative=None, decimal=None):
         self.negative = negative if negative is not None else value[0] == '-'
         self.value = value[1:] if value[0] == '-' else value
+
         if decimal is None:
             self.decimal = len(value) - value.find('.') - 1 if value.find('.') != -1 else 0
         else:
             self.decimal = decimal
         self.value = self.value.replace('.', '')
+
+        # remove front 0's
+        while len(self.value) > 0 and self.value[0] == '0':
+            self.value = self.value[1:]
+        
+        if len(self.value) == 0:
+            self.negative = False
+            self.value = '0'
 
 
     # Overloaded Ops
@@ -23,6 +32,9 @@ class BigNumber:
     def __truediv__(self, other):
         return self.divide(other)
 
+    def __mod__(self, other):
+        return self.mod(other)
+    
     def __str__(self) -> str:
         return self.toString()
 
@@ -72,12 +84,14 @@ class BigNumber:
     def divide(self, other):
         self.padDecimal(other)
         if other.isBigger(self):
-            return BigNumber(value=self.value, negative=self.negative, decimal=self.decimal)
+            return BigNumber("0")
         elif (self.negative and other.negative) or (not self.negative and  not other.negative):
             return BigNumber(self.absoluteDivide(other), negative=False)
         else:
             return BigNumber(self.absoluteDivide(other), negative=True)
 
+    def mod(self, other):
+        return BigNumber(self.abosoluteMod(other))
 
 
     # Algorithms
@@ -140,8 +154,63 @@ class BigNumber:
         return result
     
     def absoluteDivide(self, other):
-        result = "0"
+        result = ""
+        dividend_idx = len(other.value) - 1
+        current = BigNumber(self.value[0:dividend_idx+1])
+        if other.isBigger(current):
+            current = BigNumber(self.value[0:dividend_idx+2])
+
+        for i in range(1, 10):
+            temp = BigNumber(str(i)) * other
+            if temp.isBigger(current):
+                current -= (BigNumber(str(i - 1)) * other)
+                result += str(i - 1)
+                dividend_idx += 1
+                break 
+
+        while dividend_idx < len(self.value):
+            current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
+            if other.isBigger(current):
+                result += "0"
+                dividend_idx += 1
+                continue
+            else:
+                for i in range(1, 10):
+                    temp = BigNumber(str(i)) * other
+                    if temp.isBigger(current):
+                        current -= (BigNumber(str(i - 1)) * other)
+                        result += str(i - 1)
+                        break
+                dividend_idx += 1
         return result
+
+    def abosoluteMod(self, other):
+        dividend_idx = len(other.value) - 1
+        current = BigNumber(self.value[0:dividend_idx+1])
+        if other.isBigger(current):
+            current = BigNumber(self.value[0:dividend_idx+2])
+
+        for i in range(1, 10):
+            temp = BigNumber(str(i)) * other
+            if temp.isBigger(current):
+                current -= (BigNumber(str(i - 1)) * other)
+                dividend_idx += 1
+                break 
+
+        while dividend_idx < len(self.value):
+            current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
+            if other.isBigger(current):
+                dividend_idx += 1
+                continue
+            else:
+                for i in range(1, 10):
+                    temp = BigNumber(str(i)) * other
+                    if temp.isBigger(current):
+                        current -= (BigNumber(str(i - 1)) * other)
+                        break
+                dividend_idx += 1
+        return current.value
+
 
     # Helper Functions
     def negate(self):
