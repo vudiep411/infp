@@ -94,6 +94,7 @@ class BigNumber:
         return BigNumber(self.abosoluteMod(other))
 
 
+
     # Algorithms
     def abosoluteAdd(self, other):
         result = ""
@@ -111,6 +112,7 @@ class BigNumber:
             result = str(carry) + result
         return result
 
+
     def absoluteSubtract(self, other):
         result = ""
         borrow = 0
@@ -126,10 +128,10 @@ class BigNumber:
             self_idx -= 1
             other_idx -= 1
 
-        while result[0] == '0' and len(result) > 1:
+        while len(result) > 1 and result[0] == '0':
             result = result[1:]
-
         return result if result else '0'
+
 
     def absoluteMultiply(self, other):
         result = "0"
@@ -153,20 +155,25 @@ class BigNumber:
             other_idx -= 1
         return result
     
+
     def absoluteDivide(self, other):
         result = ""
         dividend_idx = len(other.value) - 1
         current = BigNumber(self.value[0:dividend_idx+1])
-        if other.isBigger(current):
-            current = BigNumber(self.value[0:dividend_idx+2])
+        while other.isBigger(current):
+            current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
+            dividend_idx += 1
 
         for i in range(1, 10):
             temp = BigNumber(str(i)) * other
             if temp.isBigger(current):
                 current -= (BigNumber(str(i - 1)) * other)
                 result += str(i - 1)
-                dividend_idx += 1
-                break 
+                break             
+            if i == 9:
+                current -= (BigNumber(str(i)) * other)
+                result += str(i)
+        dividend_idx += 1
 
         while dividend_idx < len(self.value):
             current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
@@ -181,8 +188,12 @@ class BigNumber:
                         current -= (BigNumber(str(i - 1)) * other)
                         result += str(i - 1)
                         break
+                    if i == 9:
+                        current -= (BigNumber(str(i)) * other)
+                        result += str(i)                        
                 dividend_idx += 1
         return result
+
 
     def abosoluteMod(self, other):
         dividend_idx = len(other.value) - 1
@@ -210,6 +221,7 @@ class BigNumber:
                         break
                 dividend_idx += 1
         return current.value
+
 
 
     # Helper Functions
