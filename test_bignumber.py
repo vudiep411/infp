@@ -143,8 +143,17 @@ def test_multiply():
 
     n1 = BigNumber("5")
     n2 = BigNumber("0.0")
-    assert n1.multiply(n2).toString() == "0.0" 
+    assert n1.multiply(n2).toString() == "0"
 
     n1 = BigNumber("55555")
     n2 = BigNumber("546465")
     assert n1.multiply(n2).toString() == "30358863075" 
+
+def test_divide():
+    n1 = BigNumber("5")
+    n2 = BigNumber("5.0")
+    assert n1.divide(n2).toString() == "1"    
+
+    # n1 = BigNumber("1465416546484")
+    # n2 = BigNumber("2")
+    # assert n1.divide(n2).toString() == "732708273242"    

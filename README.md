@@ -9,11 +9,14 @@ from BigNumber import BigNumber
 num1 = BigNumber("1648976548.65498")
 num2 = BigNumber("-4564984945.654")
 sum = num1 + num2
-print(sum)      # -2916008397
+print(sum)      
 num1 = BigNumber("10")
 num2 = BigNumber("10")
 sub = num1 - num2
 print(sub)      # 0
+ans = BigNumber("132") / BigNumber("132")
+print(ans)
+
 ```
 
 # Unit Test
@@ -28,4 +31,9 @@ pip install pytest
 
 ```
 pytest
+```
+
+# Run the main program
+```
+python main.py
 ```

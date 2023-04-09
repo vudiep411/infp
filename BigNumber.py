@@ -83,6 +83,8 @@ class BigNumber:
 
     def divide(self, other):
         self.padDecimal(other)
+        self.decimal = 0
+        other.decimal = 0
         if other.isBigger(self):
             return BigNumber("0")
         elif (self.negative and other.negative) or (not self.negative and  not other.negative):
@@ -229,9 +231,9 @@ class BigNumber:
         return BigNumber(self.value, not self.negative, decimal=self.decimal)
   
     def isBigger(self, other):
-        if len(self.value) > len(other.value):
+        if (len(self.value) - self.decimal) > (len(other.value) - other.decimal):
             return True
-        elif len(self.value) < len(other.value):
+        elif (len(self.value) - self.decimal) < (len(other.value) - other.decimal):
             return False
         else:
             i = 0
@@ -252,10 +254,12 @@ class BigNumber:
             i = 0
             if self.decimal > other.decimal:
                 while i < pads:
+                    other.decimal += 1
                     other.value += '0'
                     i += 1
             else: 
                 while i < pads:
+                    self.decimal += 1
                     self.value += '0'
                     i += 1
 
