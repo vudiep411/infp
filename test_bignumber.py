@@ -154,6 +154,20 @@ def test_divide():
     n2 = BigNumber("5.0")
     assert n1.divide(n2).toString() == "1"    
 
-    # n1 = BigNumber("1465416546484")
-    # n2 = BigNumber("2")
-    # assert n1.divide(n2).toString() == "732708273242"    
+    n1 = BigNumber("1465416546484")
+    n2 = BigNumber("2")
+    assert n1.divide(n2).toString() == "732708273242"    
+
+    n1 = BigNumber("14654165.46484")
+    n2 = BigNumber("264556.5474")
+    assert n1.divide(n2).toString() == "55" 
+
+
+def test_mod():
+    n1 = BigNumber("5")
+    n2 = BigNumber("5.0")
+    assert n1.mod(n2).toString() == "0"
+
+    n1 = BigNumber("4654")
+    n2 = BigNumber("45")
+    assert n1.mod(n2).toString() == "19"   

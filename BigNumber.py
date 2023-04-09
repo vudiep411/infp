@@ -83,18 +83,29 @@ class BigNumber:
 
     def divide(self, other):
         self.padDecimal(other)
-        self.decimal = 0
-        other.decimal = 0
+        self_decimal = self.decimal
+        other_decimal = other.decimal        
         if other.isBigger(self):
             return BigNumber("0")
         elif (self.negative and other.negative) or (not self.negative and  not other.negative):
-            return BigNumber(self.absoluteDivide(other), negative=False)
+            res = BigNumber(self.absoluteDivide(other), negative=False)
+            self.decimal = self_decimal
+            other.decimal = other_decimal
+            return res
         else:
-            return BigNumber(self.absoluteDivide(other), negative=True)
+            res = BigNumber(self.absoluteDivide(other), negative=True)
+            self.decimal = self_decimal
+            other.decimal = other_decimal
+            return res
 
     def mod(self, other):
-        return BigNumber(self.abosoluteMod(other))
-
+        self.padDecimal(other)
+        self_decimal = self.decimal
+        other_decimal = other.decimal
+        res =  BigNumber(self.abosoluteMod(other))
+        self.decimal = self_decimal
+        other.decimal = other_decimal
+        return res
 
 
     # Algorithms
@@ -159,21 +170,24 @@ class BigNumber:
     
 
     def absoluteDivide(self, other):
+        self.decimal = 0
+        other.decimal = 0
         result = ""
         dividend_idx = len(other.value) - 1
         current = BigNumber(self.value[0:dividend_idx+1])
         while other.isBigger(current):
-            current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
             dividend_idx += 1
+            current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
+
 
         for i in range(1, 10):
             temp = BigNumber(str(i)) * other
             if temp.isBigger(current):
-                current -= (BigNumber(str(i - 1)) * other)
+                current -= (BigNumber(str(i - 1)) * BigNumber(other.value))
                 result += str(i - 1)
                 break             
             if i == 9:
-                current -= (BigNumber(str(i)) * other)
+                current -= (BigNumber(str(i)) * BigNumber(other.value))
                 result += str(i)
         dividend_idx += 1
 
@@ -185,30 +199,36 @@ class BigNumber:
                 continue
             else:
                 for i in range(1, 10):
-                    temp = BigNumber(str(i)) * other
+                    temp = BigNumber(str(i)) * BigNumber(other.value)
                     if temp.isBigger(current):
-                        current -= (BigNumber(str(i - 1)) * other)
+                        current -= (BigNumber(str(i - 1)) * BigNumber(other.value))
                         result += str(i - 1)
                         break
                     if i == 9:
-                        current -= (BigNumber(str(i)) * other)
+                        current -= (BigNumber(str(i)) * BigNumber(other.value))
                         result += str(i)                        
                 dividend_idx += 1
         return result
 
 
     def abosoluteMod(self, other):
+        self.decimal = 0
+        other.decimal = 0
         dividend_idx = len(other.value) - 1
         current = BigNumber(self.value[0:dividend_idx+1])
-        if other.isBigger(current):
-            current = BigNumber(self.value[0:dividend_idx+2])
+        while other.isBigger(current):
+            dividend_idx += 1
+            current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
+
 
         for i in range(1, 10):
-            temp = BigNumber(str(i)) * other
+            temp = BigNumber(str(i)) * BigNumber(other.value)
             if temp.isBigger(current):
-                current -= (BigNumber(str(i - 1)) * other)
-                dividend_idx += 1
-                break 
+                current -= (BigNumber(str(i - 1)) * BigNumber(other.value))
+                break             
+            if i == 9:
+                current -= (BigNumber(str(i)) * BigNumber(other.value))
+        dividend_idx += 1
 
         while dividend_idx < len(self.value):
             current = BigNumber(current.value) * BigNumber("10") + BigNumber(self.value[dividend_idx])
@@ -217,10 +237,12 @@ class BigNumber:
                 continue
             else:
                 for i in range(1, 10):
-                    temp = BigNumber(str(i)) * other
+                    temp = BigNumber(str(i)) * BigNumber(other.value)
                     if temp.isBigger(current):
-                        current -= (BigNumber(str(i - 1)) * other)
+                        current -= (BigNumber(str(i - 1)) * BigNumber(other.value))
                         break
+                    if i == 9:
+                        current -= (BigNumber(str(i)) * BigNumber(other.value))                      
                 dividend_idx += 1
         return current.value
 

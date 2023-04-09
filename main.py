@@ -4,6 +4,8 @@ from BigNumber import BigNumber
 # b = BigNumber("222")
 # c = a*(b)
 
-c = BigNumber("54654625654654") % BigNumber("2546")
+n1 = BigNumber("5000.0") 
+n2 = BigNumber("50.2")
+c = n1 % n2
 
 print(f"Result: {c}")
