@@ -33,7 +33,7 @@ pip install pytest
 pytest
 ```
 
-# Run the main program
+# Run the main program example
 ```
 python main.py
 ```
