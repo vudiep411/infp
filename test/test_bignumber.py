@@ -1,4 +1,11 @@
-from BigNumber import BigNumber
+import sys
+import os
+
+current_path = os.path.abspath(os.path.dirname(__file__))
+project_path = os.path.abspath(os.path.join(current_path, '..'))
+sys.path.append(project_path)
+
+from bignumber.BigNumber import BigNumber
 
 def test_add_same_signs():
     n1 = BigNumber("222")
