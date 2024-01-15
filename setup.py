@@ -9,7 +9,7 @@ LONG_DESCRIPTION = """
 Calculation with very large number
 """
 
-with open("README.md", "r", "utf-8") as f:
+with open("README.md", "r") as f:
     readme = f.read()
 
 # Setting up

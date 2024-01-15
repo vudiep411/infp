@@ -14,3 +14,7 @@ with open('input.txt', 'r') as file:
         elif line[1] == '%':
             print((BigNumber(line[0]) % BigNumber(line[2])).toString())
 
+with open("README.md", "r") as f:
+    readme = f.read()
+
+print(readme)
