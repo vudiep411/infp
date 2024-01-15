@@ -1,4 +1,4 @@
-from bignumber.BigNumber import BigNumber
+from infp.BigNumber import BigNumber
 
 with open('input.txt', 'r') as file:
     for line in file:
