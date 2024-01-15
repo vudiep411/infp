@@ -13,3 +13,4 @@ with open('input.txt', 'r') as file:
             print((BigNumber(line[0]) / BigNumber(line[2])).toString())
         elif line[1] == '%':
             print((BigNumber(line[0]) % BigNumber(line[2])).toString())
+
