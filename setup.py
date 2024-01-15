@@ -18,11 +18,10 @@ setup(
     version=VERSION,
     author="Vu Diep",
     author_email="vudiep411@gmail.com",
-    description=readme,
-    long_description=LONG_DESCRIPTION,
+    description=DESCRIPTION,
+    long_description=readme,
     long_description_content_type="text/markdown",
     packages=find_packages(),
     install_requires=[],
     keywords=['python', 'data structure', 'math', 'big number', 'infinite precision'],
-    
 )
