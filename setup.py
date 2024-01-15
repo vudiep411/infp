@@ -3,8 +3,8 @@ import codecs
 import os
 
 
-VERSION = '0.0.1'
-DESCRIPTION = 'Graph package'
+VERSION = '0.0.2'
+DESCRIPTION = 'Add, Multiply, Mod, Divide Large number'
 LONG_DESCRIPTION = """
 Calculation with very large number
 """
